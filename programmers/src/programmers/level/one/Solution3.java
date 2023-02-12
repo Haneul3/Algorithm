@@ -15,6 +15,7 @@ public class Solution3 {
 			answer[s.length()-i-1] = s.charAt(i) - '0';
 		}
 		
+		
 		System.out.println(Arrays.toString(answer));
 	}
 
