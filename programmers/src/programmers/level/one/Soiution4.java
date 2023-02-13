@@ -1,6 +1,7 @@
 package programmers.level.one;
 
 public class Soiution4 {
+	
 	boolean solution(String s) {
 		char[] arr = s.toCharArray();
 		int cnt = 0;
