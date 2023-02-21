@@ -1,6 +1,6 @@
 package programmers.level.one;
 
-public class Soiution4 {
+public class Solution7 {
 	
 	boolean solution(String s) {
 		char[] arr = s.toCharArray();
@@ -13,5 +13,5 @@ public class Soiution4 {
 		}
 		return cnt == 0;
 	}
-
+	
 }
