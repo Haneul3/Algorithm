@@ -12,6 +12,7 @@ public class Solution20 {
                 System.out.printf("*");
             }
             System.out.println();
+            
         }
     }
 }
