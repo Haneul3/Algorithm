@@ -1,0 +1,370 @@
+작성 순서 : select->from->where->group by->having->order by
+내용 추가 : insert into 테이블명(추가내용1, 추가내용2) values(숫자데이터1 ,'문자데이터2');
+내용 수정 : update 테이블 명 set sal(무엇을) = 1350(뭘로 바꿀 건지)
+			where empno = 7521;   (where절에 조건 적기)
+
+-----------------------------------select---------------------------------------------
+<별칭 설정하기>
+1)한 칸 띄우고 별칭 지정
+select sal*12 연봉
+2) 큰따옴표(" ")로 묶어 지정
+select sal*12 "연 봉" <= 띄어쓰기 주고 싶으면 큰따옴표 사용하기
+3) AS 한 칸 띄운 후 'AS', 한 칸 뒤에 별칭 지정
+select sal*12 AS 연봉
+4) AS 한 칸 띄운 후 'AS', 한 칸 뒤에 별칭을 큰따옴표(" ")로  묶어 지정
+select sal*12 AS "연 봉" 
+
+<원하는 순서로 출력 데이터 정렬하기>
+- order by
+- order by ENAME desc -> 내림차순정렬
+- order by SAL asc, ENAME desc -> 오름차순, 내림차순 동시에 사용하기
+** order by는 맨 아래에 쓰기
+
+<대소문자를 바꿔주는 함수>
+- select upper(문자열) : 모두 대문자로 변환
+- select lower(문자열) : 모두 소문자로 변환
+- select inicap(문자열) :첫 글자는 대문자, 나머지는 소문자로 변환
+
+-----------------------------------where--------------------------------------------
+<비교연산자>
+- 문자비교 => ENAME >= 'F'
+- 등가 비교 연산자 : !=, <>, ^=
+
+<논리 부정 연산자>
+- where not sal = 3000;  => 급여가 3000이 아닌 경우
+- not ename like '_L%' => 이름 두 번째 글자가 L이 아닌 경우
+
+<IN연산자>
+- where 열이름 IN (데이터1,  ... 데이터n)
+- where job  IN ('teacher', 'student', 'clerk');
+- where job not IN ('teacher', 'student', 'clerk');
+- where deptno in (10,20) and job = 'ANALYST';
+
+<BETWEEN a and b 연산자>
+열이름 between 최솟값 and 최댓값
+
+<LIKE 연산자와 와일드 카드>
+- 와일드 카드 : 특정 문자 또는 문자열을 대체하거나 문자열 데이터의 패턴을 표기하는 특수문자
+- LIKE 연산자와 함께 사용할 수 있는 와일드 카드 : _, %
+- _ : 어떤 값이든 상관없이 한 개의 문자데이터를 의미
+- % : 길이와 상관없이(문자 없는 경우도 포함) 모든 문자 데이터를 의미
+- where ename like 'A_ _ _ _'; =>  A로 시작하는 이름 5글자인 사원 찾기. 대소문자 구분함
+- where ename like 'A%';  =>  A로 시작하는 모든 것 찾아줌
+- where ename like '%A';  =>  A로 끝나는 모든 것 찾아줌
+- where ename like '%A%';  =>  A가 들어간 모든 것 찾아줌
+
+<IS NULL 연산자>
+- where comm is null; => comm의 null인 데이터만 보기
+- where comm is not null;  => comm의 not null인 데이터만 보기
+- NULL : 데이터 값이 완전히 '비어 있는' 상태. 숫자 0은 값 0이 존재한다는 뜻. null과 혼동하지 않도록 주의!
+
+---------------------------------오라클 함수----------------------------------------
+
+<대소문자를 바꿔주는 함수>
+- select upper(문자열)  :  모두 대문자로 변환
+- select lower(문자열)  :  모두 소문자로 변환
+- select inicap(문자열)  : 첫 글자는 대문자, 나머지는 소문자로 변환
+
+<문자열의 길이 구하기>
+- where length(문자열)
+- substr(job, -length(job),2) => 첫글자부터 2개
+
+<문자열의 일부 추출>
+(문자열 데이터, 시작 위치, 추출 길이)
+- select substr(문자열 데이터, 시작 위치, 추출 길이) : 시작 위치부터 길이만큼
+- select substr(문자열 데이터, 시작 위치) : 시작위치부터 끝까지
+** 오라클의 인덱스 번호는 1번부터이다.
+
+<특정 문자 위치 찾기>
+- select instr('oracleoracleoracle','a') from dual;     // 제일 처음 만나는 a찾기
+- select instr('oracleoracleoracle','a',5) from dual;   // 5번부터 시작
+- select instr('oracleoracleoracle','a',-1) from dual;  // 뒤에서부터 찾음
+- select instr('oracleoracleoracle','a',1,3) from dual;  // 1번위치부터 3번째만나는 a를찾음
+
+<replace>
+(문자열 데이터/열 이름,   찾는 문자,   대체할 문자(선택)) 
+- select replace('010-7777-1111','-','') from dual;  //하이픈('-')을 공백('')으로 바꿈
+
+<데이터의 빈 공간을 특정 문자로 채우기>
+(문자열 데이터/열 이름, 데이터의 자릿수, 빈공간에 채울 문자(선택))
+- select lpad('oracle',10,'#') from dual;  // (왼쪽채움)빈자리를 특정문자로 채우고 싶을 때
+  select rpad('oracle',10,'#') from dual;  // (오른쪽채움)빈자리를 특정문자로 채우고 싶을 때
+
+<두 문자열 데이터 합치기>
+- select concat('oracle','재밌다')  => oracle재밌다
+- select concat(empno, concat(' : ', ename)) => 7788 : scott
+- select ename || ' : ' || job
+- select concat(concat(concat(concat(e.first_name, ' '), e.last_name),'의 연봉은 '), concat(e.salary, ' 입니다.'))
+** 문자열만 바꾸고 싶으면 || 사용
+
+<특정 문자 지우기>
+- trim(삭제 옵션(선택), 삭제할 문자(선택)) from 원본 문자열 데이터(필수)
+- select ltrim('aaaaaaaaoracle', 'a') from dual;  : 왼쪽의 모든 a를자름
+- select rtrim('aaaaaaaaoracleaaa', 'a') from dual;  : 오른쪽의 모든 a를 자름
+- select trim(both 'a' from 'aaaaaoracleaaaa') from dual;  // 양쪽 다 지워줌
+- select trim(both '  ' from '          oracle        ') from dual;  //양쪽 공백지워줌
+- select  ename,job,trim('*' from rpad(sal,5,'*')) from emp
+(ㄴ공백지우는 용도로 사용)
+
+
+[숫자 함수]
+반올림- select round(167.678,0),round(167.678,2),round(167.678,-1)from dual;
+버림처리- select trunc(167.678,0),trunc(167.678,1),trunc(167.678,-1)from dual;
+=> -1 : 10의자리에서 반올림하고 버림
+가장 가까운 큰정수반환-select ceil(198.555), 작은정수반환-floor(197.1234) from dual;
+나머지- select mod(15, 6) from dual;
+절댓값-select abs(-12) from dual;
+
+[날짜 함수]
+오늘날짜- select sysdate,sysdate+5, sysdate-5 from dual;
+몇 개월 이후 날짜 구하기 -  select add_months(sysdate,3) from dual; // 3개월 후
+두 날짜 간의 개월 수 차이 -  select months_between(sysdate,'2022/6/25') from dual; // 1.오늘날짜, 2. 비교할날짜
+돌아오는 요일구해줌- select next_day(sysdate,2) from dual;
+달의 마지막 날짜 구해줌-select last_day(sysdate) from dual;
+
+select to_char(sysdate,'YYYY') from dual;  // 2022
+ select to_char('1290','9,999') from dual;  //  1,290
+문자를 숫자로 - select to_number('1,290','9,999') from dual;  // 1290
+                  - select '12345', to_number('12345') from dual
+형식바꾸기 - select '2022-11-1', to_date('2022-11-1','yyyy/mm/dd') from dual;  // 22/11/01
+
+[NULL 처리 함수]
+null인 경우 지정한 데이터 반환 - select sal,comm,nvl(comm,0) from emp;
+       select sal+comm, sal+nvl(comm,0)  // comm이 null이면 0을 더해라
+select nvl(to_char(comm),'신입사원')  // comm이 숫자이기 때문에 문자로 변환 후
+select nvl2(to_char(comm),'경력','신입사원')  // null이 아니면 경력, null이면 신입사원
+
+[ decode함수(정확하게 일치하는 것만 비교함), case문(=,>,<, and, or 등 사용 가능) ]
+<decode함수>
+1-1) select deptno, decode(deptno,   // 평가할컬럼
+                       10, '전산실',       // 조건, 조건과 일치할 때 반환할 결과
+                       20, '인사과',
+                       30, '영업팀') from emp;
+1-2) select deptno, decode(deptno,
+                      10, '전산실',
+                      20, '인사과',
+                      '기타') from emp;   // else
+1-3)  select ename,deptno,hiredate,job,decode(substr(hiredate,1,2),
+ 					81, '이사',
+ 					82, '부장',
+                  				83, '과장',
+  					'상무')
+					from emp;
+<case문>
+2-1)select deptno, case deptno
+                    when 10 then '전산실'
+                    when 20 then '인사과'
+                    when 30 then '영업팀'
+                    else '기타'
+                    end
+	        from emp;
+2-2)select ename,deptno,hiredate,job,case to_number(substr(hiredate,1,2))
+                                      when 81 then '이사'   // to_number하지 않고 '81'도 ok
+                                      when 82 then '부장'
+                                      when 83 then '과장'
+                                      else '상무'
+			  end
+		   	  from emp;
+2-3) select deptno, sal, case when sal>=5000 then sal*0.1
+                           when sal>=3000 then sal*0.7
+                           else sal*0.5
+		   end
+		   from emp;
+2-4) select ename,hiredate,job,case
+  2  when to_char(hiredate,'mm') in (1, 2, 12) then '겨울'
+  3  when to_char(hiredate,'mm') in (3,4,5) then '봄'
+  4  when to_char(hiredate,'mm') in (6,7,8) then '여름'
+  5  else '가을'
+  6  end as 계절
+  7  from emp;
+
+-------------------------[다중행함수]-----------------------------
+[GROUP BY]
+*작성순서 : select->from->where->groub by->having->order by
+select 컬럼(groub by에 정의한 컬럼만), 그룹함수
+from 테이블명
+where 조건(group by 하기 전에 적용할 조건) - 그룹화 대상에 포함할 건지 안 할 건지
+group by 컬럼(그룹화하고 싶은 컬럼명이나 값)
+having 조건(group by 결과에 적용할 조건)
+order by 컬럼
+
+- select job, count(empno),avg(sal)
+  from emp
+  group by job;
+
+**** 주의사항 ****
+   groub by를 하는 경우 groub by에 명시한 컬럼과 그룹함수만 select절에 추가할 수 있다.
+
+- select job, count(empno),avg(sal)
+  from emp
+  group by job
+  order by job;
+
+- select deptno,job, count(empno)
+  from emp
+  group by deptno, job
+  order by deptno;
+
+[having절]
+1-1)
+ select job, count(empno)  // count는 기본키가 있는 걸로 주기
+ from emp
+ where sal>1000
+ group by job
+ having count(empno)<4;
+
+1-2) 입사월별 인원수 출력.
+ select to_char(hiredate,'mm') 월, count(empno) 인원수
+ from emp
+ where sal<5000
+ group by to_char(hiredate,'mm')
+ having count(empno)>1
+ order by to_char(hiredate,'mm');
+*********==**********
+ select to_char(hiredate,'mm') 월, count(empno) 인원수
+ from emp
+ where sal<5000
+ group by to_char(hiredate,'mm')
+ having count(empno)>1
+ order by 월;  // select보다 뒤에 실행하기 때문에 가능함
+
+1-3) 부서별로 최대급여, 최소급여 출력. job이 'PRESIDENT'인 데이터는 제외하고 최대급여가 3000이상인 부서만
+      부서별 오름차순 정렬
+select deptno, max(sal), min(sal)
+from emp
+where job <> 'PRESIDENT'  // job not IN ('PRESIDENT')
+group by deptno
+having  max(sal)>=3000
+order by deptno;
+
+-------------------------< 조인 >--------------------------------
+(종이에 먼저 조건 정리하고 하기!! 훨씬 쉬움)
+select * from ;
+***where 기본키테이블명.컬럼명 = 외래키테이블명. 컬럼명 (테이블 이름. 열이름)***
+where emp.DEPTNO = dept.DEPTNO;
+
+select e.deptno, e.ename, d.dname
+from emp e, dept d 
+where e.deptno = d.deptno;
+
+select e.ename, d.dname, l.city
+from emp e, dept d, locations l (테이블 3개)
+where e.deptno = d.deptno and d.loc_code = l.loc_code;
+
+select e.ename, e.sal, e.job, e.hiredate, e.comm
+from emp e, dept d, locations l
+where e.deptno = d.deptno and d.loc_code = l.loc_code and
+l.city = 'DALLAS' and e.sal >= 1500;
+
+select d.deptno, d.dname, l.city
+from dept d, locations l
+where  d.loc_code = l.loc_code;
+
+<블로그 과제>
+1) select  d.DEPARTMENT_name, count(e.employee_id)
+  from employees e, DEPARTMENTS d
+  where e.DEPARTMENT_ID = d.DEPARTMENT_ID
+  group by d.DEPARTMENT_name;
+1-2) select e.first_name || '' || e.last_name || '의 연봉은 ' || e.salary || '입니다.' as 결과
+  from employees e, DEPARTMENTS d
+  where e.DEPARTMENT_ID = d.DEPARTMENT_ID and  DEPARTMENT_NAME = 'IT'
+  order by  e.salary;
+
+DEPARTMENT_NAME                                              COUNT(EMPLOYEE_ID)
+------------------------------------------------------------ ------------------
+Administration                                                                1
+Accounting                                                                    2
+Purchasing                                                                     6
+Human Resources                                                            1
+IT                                                                                5
+Public Relations                                                              1
+Executive                                                                      3
+Shipping                                                                      45
+Sales                                                                           34
+Finance                                                                        6
+Marketing                                                                     2
+
+2) select concat(concat(concat(concat(e.first_name, ' '), e.last_name),'의 연봉은 '), concat(e.salary, ' 입니다.'))
+  from employees e, DEPARTMENTS d
+  where e.DEPARTMENT_ID = d.DEPARTMENT_ID and  DEPARTMENT_NAME = 'IT'
+  order by  e.salary;
+
+CONCAT(CONCAT(CONCAT(CONCAT(E.FIRST_NAME,''),E.LAST_NAME),'의연봉은'),CONCAT(E.SALARY,'입니다.'))
+---------------------------------------------------------------------------------------------------------------------
+Diana Lorentz의 연봉은 4200 입니다.
+David Austin의 연봉은 4800 입니다.
+Valli Pataballa의 연봉은 4800 입니다.
+Bruce Ernst의 연봉은 6000 입니다.
+Alexander Hunold의 연봉은 9000 입니다.
+
+3) select e.employee_id, e.first_name, j.job_title, d.department_name
+from employees e, DEPARTMENTS d, jobs j, locations l
+where d.location_id = l.location_id and  e.DEPARTMENT_ID = d.DEPARTMENT_ID and e.job_id=j.job_id // join은 컬럼-1 개
+and l.CITY = 'Seattle';
+
+<블로그 과제2>
+
+1) select j.job_title as JOB, sum(e.salary) as 급여
+from employees e, jobs j
+where e.job_id=j.job_id and j.job_title not like '%Representative%'
+  ㄴ>  j.job_title<> 'Sales Representative' 이렇게 하면 안 됨
+=>데이터에 Representative인 데이터가 없고 XXXXRepresentative이기 때문에 Representative가 들어가는 것을 제외하도록 명령문 쓰기
+
+group by j.job_title
+having sum(e.salary)>30000
+order by sum(e.salary);   // select에서 as 급여 안 쓰고 "order by 급여"로 해도 됨
+
+2) select d.department_name, count(e.employee_id)
+from employees e, DEPARTMENTS d
+where e.DEPARTMENT_ID = d.DEPARTMENT_ID and to_char(e.hire_date, 'yyyy') < 2005
+group by d.department_name;
+
+3) select d.department_id 부서번호, d.department_name 부서명, count(e.employee_id) 인원수,
+max(e.salary) 최고급여, min(e.salary) 최저급여, trunc(avg(e.salary),0) 평균급여, sum(e.salary) 급여총액
+from employees e, DEPARTMENTS d
+where e.DEPARTMENT_ID = d.DEPARTMENT_ID
+group by d.department_name, d.department_id
+having count(e.employee_id)>=3
+order by  count(e.employee_id) desc;
+
+4) 프로그래머스 select 문제
+SELECT i.FLAVOR
+from ICECREAM_INFO i, FIRST_HALF f
+where i.FLAVOR = f.FLAVOR and f.TOTAL_ORDER>3000 and i.INGREDIENT_TYPE = 'fruit_based'
+order by f.TOTAL_ORDER desc
+
+[외부 조인]
+<블로그과제>
+* 부서별 근무하는 인원 수를 나타내도록 하세요.단, "사원이 없는" 부서명도 같이 나타내도록 합니다.
+  => 오른쪽 내용이 없어도 왼쪽은 출력시킬 것
+select  d.DEPARTMENT_name, count(e.employee_id)
+from employees e, DEPARTMENTS d
+where e.DEPARTMENT_ID(+) = d.DEPARTMENT_ID 
+group by d.DEPARTMENT_name
+order by d.DEPARTMENT_name;
+
+<블로그 과제3>
+select e.first_name, e.salary, e.hire_date, d.department_name
+from employees e, DEPARTMENTS d
+where e.DEPARTMENT_ID = d.DEPARTMENT_ID and months_between(sysdate, e.hire_date)>12*20;
+
+
+-----------------------------< 서브쿼리 >-----------------------------------
+<블로그 과제>
+1)select ename, empno
+from emp
+where deptno in (select deptno
+                   from emp
+                   where ename like '%T%');
+
+2) select ename, deptno, sal
+from emp
+where sal> (select max(sal)
+               from emp
+               where deptno = 20);
+
+3) select ename, hiredate,sal
+from emp
+where sal > (select avg(sal)
+           from emp
+           where to_char(hiredate,'yyyy')='1982'); // hiredate between 1982/1/1 and 1982/12/31
