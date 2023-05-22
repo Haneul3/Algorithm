@@ -1,6 +1,7 @@
 package programmers.level.one;
 
 public class Solution78 {
+	// 최댓값 만들기 (1)
 	public int solution(int[] numbers) {
 		int answer = 0;
 		int max = 0;
